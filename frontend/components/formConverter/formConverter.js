@@ -1,5 +1,5 @@
 import {useAppContext} from "../../context/state";
-import { useQuery, gql } from "@apollo/client";
+import {useQuery, gql} from "@apollo/client";
 import DatePick from "../datePick/datePick";
 import Select from 'react-select';
 import styles from "./formConverter.module.css";
@@ -13,18 +13,10 @@ const QUERY_CURRENCIES = gql`
   }
 `;
 
-// const QUERY_PRICES = gql`
-//   query {
-//     allCurrencies {
-//         shortName
-//         longName
-//     }
-//   }
-// `;
-
 export default function FormConverter()
 {
     const { data, loading, error } = useQuery(QUERY_CURRENCIES);
+
     const options = [];
     const [context, setContext] = useAppContext();
 
@@ -44,8 +36,13 @@ export default function FormConverter()
         )
     }
 
+    const convertCurrencies = async event => {
+        event.preventDefault();
+        setContext({...context, result: true });
+    }
+
     return (
-        <form className={styles.container}>
+        <form className={styles.container} onSubmit={convertCurrencies}>
             <div className={styles.leftContainer}>
                 <DatePick />
             </div>
@@ -54,15 +51,15 @@ export default function FormConverter()
                     <div className={styles.fieldContainer}>
                         <label htmlFor="amount">Amount</label>
                         <input id="amount" name="amount" className={styles.fieldInput} type="text" autoComplete="amount" value={context.amount}
-                            onChange={(e) => { setContext({...context, amount: e.target.value })}}  required />
+                            onChange={(e) => { setContext({...context, amount: e.target.value, result: false })}}  required />
                     </div>
                     <div className={styles.fieldContainer}>
                         <label htmlFor="from">From</label>
-                        <Select id="from" name="from" options={options} onChange={(e) => { setContext({...context, from: e.value })}} required/>
+                        <Select id="from" name="from" options={options} onChange={(e) => { setContext({...context, from: e.value, result: false })}} required/>
                     </div>
                     <div className={styles.fieldContainer}>
                         <label htmlFor="to">To</label>
-                        <Select id="to" name="to" options={options} onChange={(e) => { setContext({...context, to: e.value })}} required/>
+                        <Select id="to" name="to" options={options} onChange={(e) => { setContext({...context, to: e.value, result: false })}} required/>
                     </div>
                     <div className={styles.fieldContainer}>
                         <button type="submit" className={styles.submitBtn}>Convert</button>

@@ -12,7 +12,7 @@ export default function datePick (){
         <div>
             <DatePicker className={styles.container}
                         selected={context.date}
-                        onChange={(date) => setContext({...context, date: date })}
+                        onChange={(date) => setContext({...context, date: date, result: false })}
                         inline
             />
         </div>
